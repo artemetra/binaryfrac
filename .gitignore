@@ -1,0 +1,8 @@
+*.o
+*.out
+*.txt
+data/*
+.venv/*
+.vscode/*
+*.dSYM
+*.DS_STORE
