@@ -3,7 +3,6 @@
 
 #include <bit>
 #include <bitset>
-// #include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -13,61 +12,39 @@ const size_t NTypeBits = 32;
 template <std::size_t Prec>
 class BinaryFraction {
    private:
-    std::bitset<Prec> m_bitset;
 
    public:
+    std::bitset<Prec> m_bitset;
     BinaryFraction(NType n);
     BinaryFraction(std::bitset<Prec> bs);
-    ~BinaryFraction();
+    friend std::ostream& operator<<(std::ostream& os, const BinaryFraction<Prec>& obj);
 };
 
-// // https://math.stackexchange.com/a/4884476/1153468
-// template <size_t Prec>
-// std::bitset<Prec> to_reciproc(NType num);
-
-template <size_t Prec>
-std::bitset<Prec> to_reciproc(NType num) {
-    std::bitset<Prec> result = {0};
-    // If the number is 2**k for some k
-    if (std::bitset<NTypeBits>(num).count() == 1) {
-        auto pos = (int)log2(num);
-        result[pos] = 1;
-        return result;
+// TODO: MOVE TO .CPP
+template<size_t Prec>
+std::ostream& operator<<(std::ostream& os, const BinaryFraction<Prec>& bf) {
+    os << "0.";
+    for (size_t i=0; i< Prec; i++)
+    {
+        os << bf.m_bitset[i];
     }
-
-    // If the number is of the form 2**k - 1
-    if (std::bitset<NTypeBits>(num + 1).count() == 1) {
-        auto pos = (size_t)log2(num + 1);
-        for (size_t k = pos-1; k <= Prec; k += pos) {
-            result[k] = 1;
-        }
-        return result;
-    }
-
-    uint8_t trailing_zero_count = 0;
-    NType qprime = num;
-    // While n has a trailing zero, divide by 2.
-    while (!(qprime & 1)) {
-        qprime >>= 1;
-        trailing_zero_count++;
-    }
-
-    std::cout << "qprime: " << qprime << "\n";
-
-    NType power = 1;
-    NType n = 1;
-    for (; n <= qprime; n++) {
-        power *= 2;
-        power %= qprime;
-        std::cout << power << " ";
-        if (power == 1) {
-            std::cout << "\n";
-            break;
-        }
-    }
-
-    std::cout << "n: " << n << "\n";
-    return std::bitset<Prec>(0);
 }
+
+// TODO: MOVE TO .CPP
+template <size_t Prec>
+BinaryFraction<Prec>::BinaryFraction(NType num) {
+    NType rec = 1;
+    std::bitset<Prec> result = {0};
+    for (size_t i = 0; i < Prec; i++) {
+        rec *= 2;
+        int floored = (int)(rec >= num);
+        result[i] = floored;
+        rec %= num;
+    }
+    m_bitset = result;
+}
+
+
+uint8_t bit_count(NType n);
 
 #endif
