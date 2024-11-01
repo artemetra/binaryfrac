@@ -12,9 +12,8 @@ const size_t NTypeBits = 32;
 template <std::size_t Prec>
 class BinaryFraction {
    private:
-
-   public:
     std::bitset<Prec> m_bitset;
+   public:
     BinaryFraction(NType n);
     BinaryFraction(std::bitset<Prec> bs);
     friend std::ostream& operator<<(std::ostream& os, const BinaryFraction<Prec>& obj);
