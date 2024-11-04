@@ -41,11 +41,10 @@ class BinaryFraction {
         return BinaryFraction<Prec>(m_bitset ^ bf2.m_bitset);
     }
 
-    // TODO: fix this because it's incorrect for whatever reason
     long double to_long_double() {
         long double res = 0;
         for (int i = 0; i < Prec+1; i++) {
-            res += pow(2, -i) * (int)m_bitset[i];
+            res += pow(2, -(i+1)) * (int)m_bitset[i];
         }
         return res;
     }
