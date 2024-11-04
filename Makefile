@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -Wall -O0 -std=c++17
+CXXFLAGS = -g -Wall -O3 -std=c++17
 
 objects = main.o binaryfraction.o
 
