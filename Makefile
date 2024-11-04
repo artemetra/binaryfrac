@@ -11,8 +11,8 @@ out: $(objects)
 main.o: main.cpp
 	$(CXX) -c $(CXXFLAGS) main.cpp -o main.o
 
-binaryfraction.o: binaryfraction.cpp
-	$(CXX) -c $(CXXFLAGS) binaryfraction.cpp -o binaryfraction.o
+# binaryfraction.o: binaryfraction.cpp
+# 	$(CXX) -c $(CXXFLAGS) binaryfraction.cpp -o binaryfraction.o
 
 clean:
 	rm -f main.out *.o

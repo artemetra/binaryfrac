@@ -1,15 +1,16 @@
 #include <bitset>
+#include <iomanip>
 #include <iostream>
 
 #include "binaryfraction.hpp"
 
-const size_t NBITS = 256;
+const size_t NBITS = 200;
+const size_t DEC_PREC = 50;
+typedef BinaryFraction<NBITS> Bf;
 
 int main() {
-    for (size_t i = 2; i <= 10; i++) {
-        auto res = BinaryFraction<100>(i);
-        std::cout << i << "\t res " << res << "\n";
-    }
-
+    auto t = (Bf(5) ^ Bf(7));
+    std::cout << t << "\n";
+    std::cout << std::setprecision(DEC_PREC) << t.to_double() << "\n";
     return 0;
 }

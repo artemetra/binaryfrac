@@ -9,41 +9,45 @@
 typedef uint32_t NType;
 const size_t NTypeBits = 32;
 
-template <std::size_t Prec>
+template <size_t Prec>
 class BinaryFraction {
    private:
     std::bitset<Prec> m_bitset;
+
    public:
-    BinaryFraction(NType n);
-    BinaryFraction(std::bitset<Prec> bs);
-    friend std::ostream& operator<<(std::ostream& os, const BinaryFraction<Prec>& obj);
+    BinaryFraction(NType num) {
+        NType rec = 1;
+        std::bitset<Prec> result = {0};
+        for (size_t i = 0; i < Prec; i++) {
+            rec *= 2;
+            int floored = (int)(rec >= num);
+            result[i] = floored;
+            rec %= num;
+        }
+        m_bitset = result;
+    }
+    BinaryFraction(std::bitset<Prec> bs) : m_bitset(bs) {}
+
+    /* Prints the bitset in reverse. */
+    friend std::ostream& operator<<(std::ostream& os, const BinaryFraction<Prec>& bf) {
+        os << "0.";  // front zero
+        for (size_t i = 0; i < Prec; i++) {
+            os << bf.m_bitset[i];
+        }
+        return os;
+    }
+
+    BinaryFraction<Prec> operator^(BinaryFraction<Prec> bf2) {
+        return BinaryFraction<Prec>(m_bitset ^ bf2.m_bitset);
+    }
+
+    long double to_double() {
+        long double res = 0;
+        for (int i = 0; i < Prec; i++) {
+            res += pow(2, -i) * (int)m_bitset[i];
+        }
+        return res;
+    }
 };
-
-// TODO: MOVE TO .CPP
-template<size_t Prec>
-std::ostream& operator<<(std::ostream& os, const BinaryFraction<Prec>& bf) {
-    os << "0.";
-    for (size_t i=0; i< Prec; i++)
-    {
-        os << bf.m_bitset[i];
-    }
-}
-
-// TODO: MOVE TO .CPP
-template <size_t Prec>
-BinaryFraction<Prec>::BinaryFraction(NType num) {
-    NType rec = 1;
-    std::bitset<Prec> result = {0};
-    for (size_t i = 0; i < Prec; i++) {
-        rec *= 2;
-        int floored = (int)(rec >= num);
-        result[i] = floored;
-        rec %= num;
-    }
-    m_bitset = result;
-}
-
-
-uint8_t bit_count(NType n);
 
 #endif
