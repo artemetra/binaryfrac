@@ -6,8 +6,8 @@
 #include <iostream>
 #include <vector>
 
-typedef uint32_t NType;
-const size_t NTypeBits = 32;
+typedef uint64_t NType;
+const size_t NTypeBits = 64;
 
 template <size_t Prec>
 class BinaryFraction {
@@ -28,6 +28,8 @@ class BinaryFraction {
     }
     BinaryFraction(std::bitset<Prec> bs) : m_bitset(bs) {}
 
+    std::bitset<Prec>& get_bitset() { return m_bitset; }
+
     /* Prints the bitset in reverse. */
     friend std::ostream& operator<<(std::ostream& os, const BinaryFraction<Prec>& bf) {
         os << "0.";  // front zero
@@ -43,8 +45,8 @@ class BinaryFraction {
 
     long double to_long_double() {
         long double res = 0;
-        for (int i = 0; i < Prec+1; i++) {
-            res += pow(2, -(i+1)) * (int)m_bitset[i];
+        for (int i = 0; i < Prec + 1; i++) {
+            res += pow(2, -(i + 1)) * (int)m_bitset[i];
         }
         return res;
     }
